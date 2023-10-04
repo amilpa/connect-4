@@ -9,14 +9,18 @@ import Check from "./utils/Check";
 import Join from "./routes/Join";
 import Play from "./routes/Play";
 
+import { SocketProvider } from "./utils/Socket";
+
 function App() {
   return (
     <Check>
       <Routes>
         <Route path="/set" element={<Change />} />
-        <Route path="/create" element={<Waiting />} />
-        <Route path="/join" element={<Join />} />
-        <Route path="/game" element={<Play gameCode="" />} />
+        <Route element={<SocketProvider />}>
+          <Route path="/create" element={<Waiting />} />
+          <Route path="/join" element={<Join />} />
+          <Route path="/game" element={<Play />} />
+        </Route>
         <Route path="/" element={<Home />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
