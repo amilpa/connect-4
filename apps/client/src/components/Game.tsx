@@ -4,10 +4,11 @@ import { checkForWin } from "../functions/checkForWin";
 import { AiFillStar } from "react-icons/ai";
 
 export default function Game({ gameCode }: { gameCode: string }) {
+  console.log(gameCode);
   const numRows = 6;
   const numCols = 7;
   const [board, setBoard] = useState(
-    Array.from({ length: numRows }, () => Array(numCols).fill(null))
+    Array.from({ length: numRows }, () => Array(numCols).fill(null)),
   );
   const [playerTurn, setPlayerTurn] = useState<string>("red");
   const [winner, setWinner] = useState<string>("");
@@ -46,20 +47,20 @@ export default function Game({ gameCode }: { gameCode: string }) {
 
   return (
     <div className="min-h-screen">
-      <h1 className="pt-8 pb-4 sm:py-4 text-center text-yellow-300 text-2xl sm:text-3xl font-bold">
+      <h1 className="pb-4 pt-8 text-center text-2xl font-bold text-yellow-300 sm:py-4 sm:text-3xl">
         Connect<span className="text-red-500">Four</span>
       </h1>
-      <div className="my-6 mx-auto w-3/4 h-3/4 sm:w-[512px] sm:h-[512px] rounded-lg py-6 sm:py-0 grid grid-rows-6 gap-6 sm:gap-0 place-items-center bg-blue-900">
+      <div className="mx-auto my-6 grid h-3/4 w-3/4 grid-rows-6 place-items-center gap-6 rounded-lg bg-blue-900 py-6 sm:h-[512px] sm:w-[512px] sm:gap-0 sm:py-0">
         {board.map((row, rowIndex) => (
           <div
             key={rowIndex}
-            className="w-full grid grid-cols-7 place-items-center"
+            className="grid w-full grid-cols-7 place-items-center"
           >
             {row.map((cell, colIndex) => {
               return (
                 <span
                   key={colIndex}
-                  className="relative w-6 h-6 sm:w-12 sm:h-12 rounded-full inline-block bg-gray-300"
+                  className="relative inline-block h-6 w-6 rounded-full bg-gray-300 sm:h-12 sm:w-12"
                   onClick={() => handleClick(colIndex)}
                 >
                   <span
@@ -67,7 +68,7 @@ export default function Game({ gameCode }: { gameCode: string }) {
                       cell === "red" ? "bg-red-500" : "bg-yellow-400"
                     } ${cell ? "top-0" : "top-[-1000px]"}`}
                   >
-                    <AiFillStar className="text-base sm:text-2xl text-gray-900" />
+                    <AiFillStar className="text-base text-gray-900 sm:text-2xl" />
                   </span>
                 </span>
               );
@@ -77,11 +78,11 @@ export default function Game({ gameCode }: { gameCode: string }) {
       </div>
       {winner && (
         <div className="flex flex-col gap-6">
-          <p className="text-xl sm:text-2xl font-semibold text-center">
+          <p className="text-center text-xl font-semibold sm:text-2xl">
             Winner: {winner}
           </p>
           <button
-            className="block mx-auto px-4 py-2 rounded-xl text-xl transition-all bg-blue-900 hover:bg-zinc-900"
+            className="mx-auto block rounded-xl bg-blue-900 px-4 py-2 text-xl transition-all hover:bg-zinc-900"
             onClick={resetGame}
           >
             Reset Game
@@ -89,7 +90,7 @@ export default function Game({ gameCode }: { gameCode: string }) {
         </div>
       )}
       {!winner && (
-        <p className="text-xl sm:text-2xl font-semibold text-center">
+        <p className="text-center text-xl font-semibold sm:text-2xl">
           Turn :{" "}
           <span
             className={`${

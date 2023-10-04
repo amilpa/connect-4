@@ -1,9 +1,9 @@
 import { TiTick } from "react-icons/ti";
 
-import { io, Socket } from "socket.io-client";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState, useContext } from "react";
+import { socketContext } from "../utils/Socket";
 
 enum Ready {
   None,
@@ -14,28 +14,31 @@ enum Ready {
 
 export default function EnterCode() {
   const [ready, setReady] = useState(Ready.None);
-  const [err, setErr] = useState(false);
   const gameCode = useRef("");
+  const navigate = useNavigate();
+  const socket = useContext(socketContext);
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const code = formData.get("code") as string;
     gameCode.current = code;
-    const socket: Socket = io(import.meta.env.VITE_SOCKET_URL);
-    socket.emit("join", code);
-    socket.on("joined", () => {
+    socket?.emit("join", code);
+    socket?.on("joined", () => {
       setReady(Ready.Ready);
-      socket.disconnect();
     });
-    socket.on("full", () => {
+    socket?.on("full", () => {
       setReady(Ready.Full);
+    });
+    socket?.on("not-found", () => {
+      setReady(Ready.NotFound);
     });
   }
 
-  if (ready == Ready.Ready) {
-    return <Navigate to="/game" state={gameCode} />;
-  }
+  useEffect(() => {
+    if (ready == Ready.Ready)
+      navigate("/game", { state: { gameCode: gameCode.current } });
+  }, [ready]);
 
   return (
     <div className="absolute left-1/2 top-36 -translate-x-1/2">
@@ -57,6 +60,12 @@ export default function EnterCode() {
           <TiTick className="text-neutral-800" />
         </button>
       </form>
+      {ready == Ready.Full && (
+        <p className="mt-2 font-semibold text-red-400">Game is full</p>
+      )}
+      {ready == Ready.NotFound && (
+        <p className="mt-2 font-semibold text-red-400">Room not found</p>
+      )}
     </div>
   );
 }

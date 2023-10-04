@@ -19,15 +19,15 @@ export default function Input() {
   }
 
   return (
-    <div className="absolute top-36 left-1/2 -translate-x-1/2">
-      <h1 className="text-2xl text-yellow-400 font-semibold pb-4">
+    <div className="absolute left-1/2 top-36 -translate-x-1/2">
+      <h1 className="pb-4 text-2xl font-semibold text-yellow-400">
         Enter username:
       </h1>
       <form onSubmit={handleSubmit} className="flex gap-2">
         <input
           type="text"
           name="username"
-          className="pl-2 py-1 bg-neutral-800 border-2 border-gray-400 outline-none focus:ring-2 focus:ring-red-400"
+          className="border-2 border-gray-400 bg-neutral-800 py-1 pl-2 outline-none focus:ring-2 focus:ring-red-400"
         />
         <button
           type="submit"
