@@ -9,14 +9,14 @@ import { useContext } from "react";
 export default function Home() {
   const username = useContext(CheckContext).username;
   return (
-    <div className="absolute top-24 left-1/2 -translate-x-1/2">
-      <h1 className="pt-8 pb-4 sm:py-4 text-center text-yellow-300 text-2xl sm:text-3xl font-bold">
+    <div className="absolute left-1/2 top-24 -translate-x-1/2">
+      <h1 className="pb-4 pt-8 text-center text-2xl font-bold text-yellow-300 sm:py-4 sm:text-3xl">
         Connect<span className="text-red-500">Four</span>
       </h1>
-      <h1 className="border-2 border-gray-500 rounded-lg py-2 text-center sm:text-xl">
+      <h1 className="rounded-lg border-2 border-gray-500 py-2 text-center sm:text-xl">
         Welcome, {username}
       </h1>
-      <div className="flex flex-col items-center mt-4 gap-4">
+      <div className="mt-4 flex flex-col items-center gap-4">
         <Button
           link="/create"
           icon={<AiOutlinePlus className="inline text-sm" />}
