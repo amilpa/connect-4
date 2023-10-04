@@ -27,12 +27,13 @@ io.on("connection", (socket) => {
       socket.emit("not-found");
       return;
     }
+    socket.join(roomName);
     let clientsInRoom = io.sockets.adapter.rooms.get(roomName);
     if (clientsInRoom.size > 2) {
       socket.emit("full");
+      socket.disconnect();
       return;
     } else {
-      socket.join(roomName);
       socket.emit("joined", roomName);
       socket.to(roomName).emit("player-joined");
     }
