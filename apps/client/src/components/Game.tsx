@@ -1,17 +1,24 @@
-import { useState } from "react";
+import { useRef, useState, useContext, useEffect } from "react";
+import { socketContext } from "../utils/Socket";
+
 import { checkForWin } from "../functions/checkForWin";
 
 import { AiFillStar } from "react-icons/ai";
 
-export default function Game({ gameCode }: { gameCode: string }) {
-  console.log(gameCode);
+export default function Game() {
+  const socket = useContext(socketContext);
   const numRows = 6;
   const numCols = 7;
   const [board, setBoard] = useState(
     Array.from({ length: numRows }, () => Array(numCols).fill(null)),
   );
+  const myColor = useRef(null);
   const [playerTurn, setPlayerTurn] = useState<string>("red");
   const [winner, setWinner] = useState<string>("");
+
+  useEffect(() => {
+    socket?.emit("loaded");
+  }, [socket]);
 
   const handleClick = (col: number) => {
     if (winner) return;
