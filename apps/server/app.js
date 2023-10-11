@@ -40,23 +40,23 @@ io.on("connection", (socket) => {
       socket.to(roomName).emit("ready", roomName);
     }
   });
-  socket.on("loaded", () => {
-    const roomName = getRoomName(socket);
-    const roomInfo = roomData.get(roomName);
-    if (roomInfo) {
-      roomInfo.eventCount++;
-      console.log(roomInfo.eventCount, roomInfo.totalClients);
-
-      if (roomInfo.eventCount === roomInfo.totalClients) {
-        const color = Math.random() > 0.5 ? "red" : "yellow";
+  socket.on("loaded", (roomName) => {
+    //add to roomInfo
+    if (!roomData.has(roomName)) {
+      roomData.set(roomName, {
+        ready: 1,
+      });
+    } else {
+      roomData.get(roomName).ready = 2;
+      const clientsInRoom = io.sockets.adapter.rooms.get(roomName);
+      let colors = ["red", "yellow"];
+      for (const clientId of clientsInRoom) {
+        let randomColor = colors[Math.floor(Math.random() * colors.length)];
+        const clientSocket = io.sockets.sockets.get(clientId);
+        clientSocket.emit("color", randomColor);
       }
     }
   });
 });
-
-function getRoomName(socket) {
-  const rooms = socket.rooms.keys();
-  return rooms.next().value;
-}
 
 console.log(`Server is running on port ${port}`);

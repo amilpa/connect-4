@@ -5,20 +5,23 @@ import { checkForWin } from "../functions/checkForWin";
 
 import { AiFillStar } from "react-icons/ai";
 
-export default function Game() {
+export default function Game({ gameCode }: { gameCode: string }) {
   const socket = useContext(socketContext);
   const numRows = 6;
   const numCols = 7;
   const [board, setBoard] = useState(
-    Array.from({ length: numRows }, () => Array(numCols).fill(null)),
+    Array.from({ length: numRows }, () => Array(numCols).fill(null))
   );
   const myColor = useRef(null);
   const [playerTurn, setPlayerTurn] = useState<string>("red");
   const [winner, setWinner] = useState<string>("");
 
   useEffect(() => {
-    socket?.emit("loaded");
-  }, [socket]);
+    socket?.emit("loaded", gameCode);
+    socket?.on("color", (color) => {
+      console.log(`Color recieved ${color}`);
+    });
+  }, [socket, gameCode]);
 
   const handleClick = (col: number) => {
     if (winner) return;
@@ -27,7 +30,6 @@ export default function Game() {
 
     const newBoard = [...board];
     newBoard[row][col] = playerTurn;
-    console.log(newBoard);
     setBoard(newBoard);
 
     if (checkForWin(numRows, numCols, playerTurn, board, row, col)) {
@@ -54,7 +56,7 @@ export default function Game() {
 
   return (
     <div className="min-h-screen">
-      <h1 className="pb-4 pt-8 text-center text-2xl font-bold text-yellow-300 sm:py-4 sm:text-3xl">
+      <h1 className="pt-8 pb-4 text-2xl font-bold text-center text-yellow-300 sm:py-4 sm:text-3xl">
         Connect<span className="text-red-500">Four</span>
       </h1>
       <div className="mx-auto my-6 grid h-3/4 w-3/4 grid-rows-6 place-items-center gap-6 rounded-lg bg-blue-900 py-6 sm:h-[512px] sm:w-[512px] sm:gap-0 sm:py-0">
@@ -67,7 +69,7 @@ export default function Game() {
               return (
                 <span
                   key={colIndex}
-                  className="relative inline-block h-6 w-6 rounded-full bg-gray-300 sm:h-12 sm:w-12"
+                  className="relative inline-block w-6 h-6 bg-gray-300 rounded-full sm:h-12 sm:w-12"
                   onClick={() => handleClick(colIndex)}
                 >
                   <span
@@ -85,11 +87,11 @@ export default function Game() {
       </div>
       {winner && (
         <div className="flex flex-col gap-6">
-          <p className="text-center text-xl font-semibold sm:text-2xl">
+          <p className="text-xl font-semibold text-center sm:text-2xl">
             Winner: {winner}
           </p>
           <button
-            className="mx-auto block rounded-xl bg-blue-900 px-4 py-2 text-xl transition-all hover:bg-zinc-900"
+            className="block px-4 py-2 mx-auto text-xl transition-all bg-blue-900 rounded-xl hover:bg-zinc-900"
             onClick={resetGame}
           >
             Reset Game
@@ -97,7 +99,7 @@ export default function Game() {
         </div>
       )}
       {!winner && (
-        <p className="text-center text-xl font-semibold sm:text-2xl">
+        <p className="text-xl font-semibold text-center sm:text-2xl">
           Turn :{" "}
           <span
             className={`${

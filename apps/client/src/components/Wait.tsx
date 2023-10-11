@@ -24,9 +24,9 @@ export default function Wait() {
 
   if (!ready) {
     return (
-      <div className="absolute left-1/2 top-44 w-max -translate-x-1/2 rounded-lg bg-neutral-900 p-8">
+      <div className="absolute p-8 -translate-x-1/2 rounded-lg left-1/2 top-44 w-max bg-neutral-900">
         <h1 className="">Waiting for people to join...</h1>
-        <h1 className="mt-4 text-center text-lg sm:text-xl">
+        <h1 className="mt-4 text-lg text-center sm:text-xl">
           Room no:{" "}
           <span className="font-semibold text-yellow-400">{gameCode}</span>
         </h1>

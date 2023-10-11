@@ -38,10 +38,10 @@ export default function EnterCode() {
   useEffect(() => {
     if (ready == Ready.Ready)
       navigate("/game", { state: { gameCode: gameCode.current } });
-  }, [ready]);
+  }, [ready, navigate]);
 
   return (
-    <div className="absolute left-1/2 top-36 -translate-x-1/2">
+    <div className="absolute -translate-x-1/2 left-1/2 top-36">
       <h1 className="pb-4 text-2xl font-semibold text-yellow-400">
         Enter game code:
       </h1>
@@ -50,12 +50,12 @@ export default function EnterCode() {
           <input
             type="text"
             name="code"
-            className="border-2 border-gray-400 bg-neutral-800 py-1 pl-2 outline-none focus:ring-2 focus:ring-red-400"
+            className="py-1 pl-2 border-2 border-gray-400 outline-none bg-neutral-800 focus:ring-2 focus:ring-red-400"
           />
         </div>
         <button
           type="submit"
-          className=" bg-gray-400 px-2 focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 focus:ring-offset-neutral-900"
+          className="px-2 bg-gray-400 focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 focus:ring-offset-neutral-900"
         >
           <TiTick className="text-neutral-800" />
         </button>
