@@ -22,6 +22,12 @@ export default function Wait() {
     });
   }, [socket]);
 
+  useEffect(() => {
+    if (ready) {
+      navigate("/game", { state: { gameCode: gameCode } });
+    }
+  }, [navigate, gameCode, ready]);
+
   if (!ready) {
     return (
       <div className="absolute p-8 -translate-x-1/2 rounded-lg left-1/2 top-44 w-max bg-neutral-900">
@@ -33,5 +39,4 @@ export default function Wait() {
       </div>
     );
   }
-  navigate("/game", { state: { gameCode: gameCode } });
 }

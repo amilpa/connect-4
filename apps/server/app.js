@@ -43,19 +43,43 @@ io.on("connection", (socket) => {
   socket.on("loaded", (roomName) => {
     //add to roomInfo
     if (!roomData.has(roomName)) {
+      let assignedColors = new Map();
       roomData.set(roomName, {
         ready: 1,
+        assignedColors: assignedColors,
+        boardData: null,
       });
     } else {
       roomData.get(roomName).ready = 2;
       const clientsInRoom = io.sockets.adapter.rooms.get(roomName);
+      if (!clientsInRoom) return;
       let colors = ["red", "yellow"];
+      let assignedColors = roomData.get(roomName).assignedColors;
       for (const clientId of clientsInRoom) {
-        let randomColor = colors[Math.floor(Math.random() * colors.length)];
+        if (!assignedColors.has(clientId)) {
+          let randomIndex = Math.floor(Math.random() * colors.length);
+          let randomColor = colors[randomIndex];
+          assignedColors.set(clientId, randomColor);
+          colors.splice(randomIndex, 1); // remove assigned color from colors array
+        }
+      }
+      for (const clientId of clientsInRoom) {
         const clientSocket = io.sockets.sockets.get(clientId);
-        clientSocket.emit("color", randomColor);
+        console.log(
+          `Sending color ${assignedColors.get(clientId)} to ${clientId}`
+        );
+        clientSocket.emit("start", assignedColors.get(clientId));
       }
     }
+    socket.on("move_client", ({ row, col, color: playerTurn }) => {
+      const clientsInRoom = io.sockets.adapter.rooms.get(roomName);
+      for (const clientId of clientsInRoom) {
+        if (clientId !== socket.id) {
+          const clientSocket = io.sockets.sockets.get(clientId);
+          clientSocket.emit("move", { row, col, color: playerTurn });
+        }
+      }
+    });
   });
 });
 
