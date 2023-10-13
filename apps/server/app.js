@@ -65,18 +65,45 @@ io.on("connection", (socket) => {
       }
       for (const clientId of clientsInRoom) {
         const clientSocket = io.sockets.sockets.get(clientId);
-        console.log(
-          `Sending color ${assignedColors.get(clientId)} to ${clientId}`
-        );
+        // console.log(
+        //   `Sending color ${assignedColors.get(clientId)} to ${clientId}`
+        // );
         clientSocket.emit("start", assignedColors.get(clientId));
       }
     }
-    socket.on("move_client", ({ row, col, color: playerTurn }) => {
+    socket.on("move client", ({ row, col, color: playerTurn }) => {
       const clientsInRoom = io.sockets.adapter.rooms.get(roomName);
       for (const clientId of clientsInRoom) {
         if (clientId !== socket.id) {
           const clientSocket = io.sockets.sockets.get(clientId);
           clientSocket.emit("move", { row, col, color: playerTurn });
+        }
+      }
+    });
+    socket.on("play again to server", () => {
+      const clientsInRoom = io.sockets.adapter.rooms.get(roomName);
+      for (const clientId of clientsInRoom) {
+        if (clientId !== socket.id) {
+          const clientSocket = io.sockets.sockets.get(clientId);
+          clientSocket.emit("play again");
+        }
+      }
+    });
+    socket.on("confirm again to server", () => {
+      const clientsInRoom = io.sockets.adapter.rooms.get(roomName);
+      for (const clientId of clientsInRoom) {
+        if (clientId !== socket.id) {
+          const clientSocket = io.sockets.sockets.get(clientId);
+          clientSocket.emit("confirm again");
+        }
+      }
+    });
+    socket.on("quit to server", () => {
+      const clientsInRoom = io.sockets.adapter.rooms.get(roomName);
+      for (const clientId of clientsInRoom) {
+        if (clientId !== socket.id) {
+          const clientSocket = io.sockets.sockets.get(clientId);
+          clientSocket.emit("quit");
         }
       }
     });

@@ -1,25 +1,42 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { socketContext } from "../utils/Socket";
 
 import { checkForWin } from "../functions/checkForWin";
 
 import { AiFillStar } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
+import LargeText from "./LargeText";
+
+enum Waiting {
+  Waiting,
+  Quit,
+  Start,
+  False,
+}
 
 export default function Game({ gameCode }: { gameCode: string }) {
   const socket = useContext(socketContext);
 
+  const navigate = useNavigate();
+
   const [error, setError] = useState<boolean>(false);
   const [again, setAgain] = useState<boolean>(false);
-  const [wait, setWait] = useState<boolean>(false);
+  const [wait, setWait] = useState<Waiting>(Waiting.False);
 
   const numRows = 6;
   const numCols = 7;
   const [board, setBoard] = useState(
     Array.from({ length: numRows }, () => Array(numCols).fill(null))
   );
-  const myColor = useRef(null);
+  const [myColor, setMyColor] = useState<string>("");
   const [playerTurn, setPlayerTurn] = useState<string>("red");
   const [winner, setWinner] = useState<string>("");
+
+  const resetGame = useCallback(() => {
+    setBoard(Array.from({ length: numRows }, () => Array(numCols).fill(null)));
+    setPlayerTurn("red");
+    setWinner("");
+  }, []);
 
   useEffect(() => {
     if (!socket) {
@@ -27,14 +44,21 @@ export default function Game({ gameCode }: { gameCode: string }) {
     }
     socket?.emit("loaded", gameCode);
     socket?.on("start", (color) => {
-      if (!myColor.current) {
-        myColor.current = color;
+      if (!myColor) {
+        setMyColor(color);
       }
     });
-    socket?.on("play_again", () => {
+    socket?.on("play again", () => {
       setAgain(true);
     });
-  }, [myColor, socket, gameCode]);
+    socket?.on("confirm again", () => {
+      setWait(Waiting.Start);
+      resetGame();
+    });
+    socket?.on("quit", () => {
+      setWait(Waiting.Quit);
+    });
+  }, [myColor, socket, gameCode, resetGame]);
 
   useEffect(() => {
     socket?.on("move", ({ row, col, color }) => {
@@ -50,7 +74,7 @@ export default function Game({ gameCode }: { gameCode: string }) {
   }, [socket, board]);
 
   const handleClick = (col: number) => {
-    if (playerTurn !== myColor.current) return;
+    if (playerTurn !== myColor) return;
     if (winner) return;
     const row = getNextOpenRow(col);
     if (row === null) return; // Column is full
@@ -64,7 +88,7 @@ export default function Game({ gameCode }: { gameCode: string }) {
     } else {
       setPlayerTurn(playerTurn === "red" ? "yellow" : "red");
     }
-    socket?.emit("move_client", { row, col, color: playerTurn });
+    socket?.emit("move client", { row, col, color: playerTurn });
   };
 
   const getNextOpenRow = (col: number) => {
@@ -76,15 +100,30 @@ export default function Game({ gameCode }: { gameCode: string }) {
     return null; // Column is full
   };
 
-  const resetGame = () => {
-    socket?.emit("play_again");
-    setBoard(Array.from({ length: numRows }, () => Array(numCols).fill(null)));
-    setPlayerTurn("red");
-    setWinner("");
+  const playAgain = () => {
+    setWait(Waiting.Waiting);
+    socket?.emit("play again to server");
+  };
+
+  const sentAgain = (resetGame: () => void) => {
+    socket?.emit("confirm again to server");
+    resetGame();
+    setAgain(false);
+  };
+
+  const quit = () => {
+    socket?.emit("quit to server");
+    navigate("/");
   };
 
   return (
     <>
+      {wait === Waiting.Waiting && (
+        <LargeText text="Waiting for player approval" />
+      )}
+      {wait === Waiting.Quit && (
+        <LargeText text="Player withdrew from the match" button={true} />
+      )}
       {error ? (
         <h1 className="mt-24 text-2xl font-bold text-center text-yellow-300">
           Error: Socket not connected
@@ -92,16 +131,19 @@ export default function Game({ gameCode }: { gameCode: string }) {
       ) : (
         <>
           {again ? (
-            <div>
-              <h1>Play again?</h1>
-              <div className="flex gap-4">
+            <div className="absolute flex flex-col gap-4 px-8 py-4 -translate-x-1/2 rounded-md top-24 left-1/2 bg-neutral-900 w-max">
+              <h1 className="text-xl font-medium text-center">Play again?</h1>
+              <div className="flex justify-center gap-4">
                 <button
-                  onClick={}
-                  className="block px-4 py-2 mx-auto text-xl transition-all bg-blue-900 rounded-xl hover:bg-zinc-900"
+                  onClick={() => sentAgain(resetGame)}
+                  className="block px-4 py-2 text-xl transition-all bg-blue-900 rounded-xl hover:bg-zinc-900"
                 >
                   Yes
                 </button>
-                <button className="block px-4 py-2 mx-auto text-xl transition-all bg-blue-900 rounded-xl hover:bg-zinc-900">
+                <button
+                  onClick={quit}
+                  className="block px-4 py-2 text-xl transition-all bg-blue-900 rounded-xl hover:bg-zinc-900"
+                >
                   No
                 </button>
               </div>
@@ -151,7 +193,7 @@ export default function Game({ gameCode }: { gameCode: string }) {
                   </p>
                   <button
                     className="block px-4 py-2 mx-auto text-xl transition-all bg-blue-900 rounded-xl hover:bg-zinc-900"
-                    onClick={resetGame}
+                    onClick={playAgain}
                   >
                     Play again
                   </button>
@@ -167,6 +209,18 @@ export default function Game({ gameCode }: { gameCode: string }) {
                   >
                     {playerTurn == "red" ? "Red" : "Yellow"}
                   </span>
+                  {myColor !== "" && (
+                    <span className="block">
+                      Your color :{" "}
+                      <span
+                        className={`${
+                          myColor == "red" ? "text-red-400" : "text-yellow-400"
+                        }`}
+                      >
+                        {myColor[0].toUpperCase() + myColor.slice(1)}
+                      </span>
+                    </span>
+                  )}
                 </p>
               )}
             </div>
