@@ -31,7 +31,7 @@ export default function Input() {
         />
         <button
           type="submit"
-          className="px-2 bg-gray-400  focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 focus:ring-offset-neutral-900"
+          className="px-2 bg-gray-400 focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 focus:ring-offset-neutral-900"
         >
           <TiTick className="text-neutral-800" />
         </button>
