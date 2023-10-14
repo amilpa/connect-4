@@ -1,13 +1,13 @@
-import { Routes, Route } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
+import Change from "./routes/Change";
 import Home from "./routes/Home";
 import NotFound from "./routes/NotFound";
-import Change from "./routes/Change";
 import Waiting from "./routes/Waiting";
 
-import Check from "./utils/Check";
 import Join from "./routes/Join";
 import Play from "./routes/Play";
+import Check from "./utils/Check";
 
 import { SocketProvider } from "./utils/Socket";
 

@@ -2,7 +2,7 @@ import { TiTick } from "react-icons/ti";
 
 import { useNavigate } from "react-router-dom";
 
-import { useEffect, useRef, useState, useContext } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { socketContext } from "../utils/Socket";
 
 enum Ready {
