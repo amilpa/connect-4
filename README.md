@@ -1,81 +1,91 @@
-# Turborepo starter
+# Connect 4 Multiplayer Game with React and Socket.IO
 
-This is an official starter Turborepo.
+![Connect 4 Game](link_to_game_screenshot)
 
-## Using this example
+Welcome to the Connect 4 Multiplayer Game, a web-based implementation of the classic Connect 4 board game created using React and Socket.IO. This interactive project allows users to host games, invite friends to join with a unique code, change their usernames, and even enjoy rematches. Get ready for hours of fun with friends or players from around the world!
 
-Run the following command:
+## Table of Contents
 
-```sh
-npx create-turbo@latest
-```
+- [Demo](#demo)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Screenshots](#screenshots)
+- [Technologies](#technologies-used)
+- [Contributing](#contributing)
+- [License](#license)
 
-## What's inside?
+## Demo
 
-This Turborepo includes the following packages/apps:
+A live demo of the game can be accessed [here](link_to_live_demo).
 
-### Apps and Packages
+## Features
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `ui`: a stub React component library shared by both `web` and `docs` applications
-- `eslint-config-custom`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `tsconfig`: `tsconfig.json`s used throughout the monorepo
+- **Multiplayer Gameplay:** Play the classic Connect 4 game with friends or players from around the world.
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+- **Host Games:** Users can create and host games, waiting for opponents to join using a unique game code.
 
-### Utilities
+- **Join Games:** Participants can join games by entering the host's game code, making it easy to connect with friends.
 
-This Turborepo has some additional tools already setup for you:
+- **Change Username:** Customize your in-game username to personalize your gaming experience.
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+- **Play Again:** After completing a game, enjoy the option to start a rematch with the same opponent.
 
-### Build
+## Installation
 
-To build all apps and packages, run the following command:
+Follow these steps to run the Connect 4 Multiplayer Game locally:
 
-```
-cd my-turborepo
-pnpm build
-```
+1. Clone the repository to your local machine:
+   ```bash
+   git clone https://github.com/amilpa/connect-4.git
+   ```
+2. Change to the project directory:
+   ```bash
+   cd connect-4
+   ```
+3. Install the project dependencies using pnpm:
+   ```bash
+   pnpm install
+   ```
+4. Start the development server
+   ```bash
+   pnpm start
+   ```
+5. Access the game in your web browser at http://localhost:5173.
 
-### Develop
+## Usage
 
-To develop all apps and packages, run the following command:
+  - **Host a Game**: Click the "Host Game" button and share the generated game code with friends. Wait for them to join.
 
-```
-cd my-turborepo
-pnpm dev
-```
+  - **Join a Game**: Enter a friend's game code and click "Join Game" to become a participant in the game.
 
-### Remote Caching
+  - **Change Username**: Click on your current username and update it to your preference.
 
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+  - **Play Again**: After a game ends, use the "Play Again" button to start a new game with the same opponent.
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
+## Screenshots
 
-```
-cd my-turborepo
-npx turbo login
-```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+## Technologies Used
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+This project was built using the following technologies:
 
-```
-npx turbo link
-```
+  - React: A JavaScript library for building user interfaces.
+  - Socket.IO: A real-time, bidirectional communication library for building interactive web applications.
+  - Tailwindcss: A utility-first CSS framework that provides a set of pre-defined CSS classes
 
-## Useful Links
+## Contributing
 
-Learn more about the power of Turborepo:
+Contributions to the project are welcome. To contribute, follow these steps:
 
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+  - Fork the repository.
+  - Create a new branch for your feature: git checkout -b feature-name
+  - Commit your changes: git commit -m 'Add feature'
+  - Push to the branch: git push origin feature-name
+  - Open a Pull Request.
+
+## License
+
+This project is licensed under the MIT License.
+
+Enjoy playing Connect 4 with your friends and have fun! If you encounter any issues or have suggestions, feel free to open an issue or contribute to the project. Happy gaming!
