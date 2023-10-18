@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { socketContext } from "../utils/Socket";
 
 import { checkForWin } from "../functions/checkForWin";
@@ -31,6 +31,7 @@ export default function Game({ gameCode }: { gameCode: string }) {
   const [myColor, setMyColor] = useState<string>("");
   const [playerTurn, setPlayerTurn] = useState<string>("red");
   const [winner, setWinner] = useState<string>("");
+  const boardRef = useRef(board);
 
   const resetGame = useCallback(() => {
     setBoard(Array.from({ length: numRows }, () => Array(numCols).fill(null)));
@@ -53,27 +54,32 @@ export default function Game({ gameCode }: { gameCode: string }) {
     });
     socket?.on("confirm again", () => {
       setWait(Waiting.Start);
-      resetGame();
     });
     socket?.on("quit", () => {
       setWait(Waiting.Quit);
     });
-  }, [myColor, socket, gameCode, resetGame]);
+  }, [myColor, socket, gameCode]);
+
+  useEffect(() => {
+    boardRef.current = board;
+  }, [board]);
 
   useEffect(() => {
     socket?.on("move", ({ row, col, color }) => {
-      const newBoard = [...board];
+      const newBoard = [...boardRef.current];
       newBoard[row][col] = color;
       setBoard(newBoard);
-      if (checkForWin(numRows, numCols, color, board, row, col)) {
+      if (checkForWin(numRows, numCols, color, boardRef.current, row, col)) {
         setWinner(color);
       } else {
         setPlayerTurn(color === "red" ? "yellow" : "red");
       }
+      return;
     });
-  }, [socket, board]);
+  }, [socket]);
 
   const handleClick = (col: number) => {
+    console.log("Handle click");
     if (playerTurn !== myColor) return;
     if (winner) return;
     const row = getNextOpenRow(col);
@@ -102,14 +108,21 @@ export default function Game({ gameCode }: { gameCode: string }) {
 
   const playAgain = () => {
     setWait(Waiting.Waiting);
+    resetGame();
     socket?.emit("play again to server");
   };
 
-  const sentAgain = (resetGame: () => void) => {
+  const sentAgain = () => {
     socket?.emit("confirm again to server");
-    resetGame();
+    console.log(board);
     setAgain(false);
   };
+
+  useEffect(() => {
+    if (again) {
+      resetGame();
+    }
+  }, [again, resetGame]);
 
   const quit = () => {
     socket?.emit("quit to server");
@@ -122,7 +135,11 @@ export default function Game({ gameCode }: { gameCode: string }) {
         <LargeText text="Waiting for player approval" />
       )}
       {wait === Waiting.Quit && (
-        <LargeText text="Player withdrew from the match" button={true} />
+        <LargeText
+          text="Player withdrew from the match"
+          button={true}
+          clickHandle={() => navigate("/")}
+        />
       )}
       {error ? (
         <h1 className="mt-24 text-2xl font-bold text-center text-yellow-300">
@@ -131,11 +148,11 @@ export default function Game({ gameCode }: { gameCode: string }) {
       ) : (
         <>
           {again ? (
-            <div className="absolute flex flex-col gap-4 px-8 py-4 -translate-x-1/2 rounded-md top-24 left-1/2 bg-neutral-900 w-max">
+            <div className="absolute flex flex-col gap-4 px-8 py-4 -translate-x-1/2 -translate-y-1/2 rounded-md top-1/2 left-1/2 bg-neutral-900 w-max">
               <h1 className="text-xl font-medium text-center">Play again?</h1>
               <div className="flex justify-center gap-4">
                 <button
-                  onClick={() => sentAgain(resetGame)}
+                  onClick={sentAgain}
                   className="block px-4 py-2 text-xl transition-all bg-blue-900 rounded-xl hover:bg-zinc-900"
                 >
                   Yes

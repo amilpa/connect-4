@@ -77,8 +77,10 @@ io.on("connection", (socket) => {
         if (clientId !== socket.id) {
           const clientSocket = io.sockets.sockets.get(clientId);
           clientSocket.emit("move", { row, col, color: playerTurn });
+          return;
         }
       }
+      return;
     });
     socket.on("play again to server", () => {
       const clientsInRoom = io.sockets.adapter.rooms.get(roomName);
