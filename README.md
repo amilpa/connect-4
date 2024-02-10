@@ -6,7 +6,7 @@ Welcome to the Connect 4 Multiplayer Game, a web-based implementation of the cla
 
 ## Table of Contents
 
-- [Demo](#demo)
+- [Demo](https://youtu.be/sB6N7P7e4XY)
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
@@ -55,34 +55,33 @@ Follow these steps to run the Connect 4 Multiplayer Game locally:
 
 ## Usage
 
-  - **Host a Game**: Click the "Host Game" button and share the generated game code with friends. Wait for them to join.
+- **Host a Game**: Click the "Host Game" button and share the generated game code with friends. Wait for them to join.
 
-  - **Join a Game**: Enter a friend's game code and click "Join Game" to become a participant in the game.
+- **Join a Game**: Enter a friend's game code and click "Join Game" to become a participant in the game.
 
-  - **Change Username**: Click on your current username and update it to your preference.
+- **Change Username**: Click on your current username and update it to your preference.
 
-  - **Play Again**: After a game ends, use the "Play Again" button to start a new game with the same opponent.
+- **Play Again**: After a game ends, use the "Play Again" button to start a new game with the same opponent.
 
 ## Screenshots
-
 
 ## Technologies Used
 
 This project was built using the following technologies:
 
-  - React: A JavaScript library for building user interfaces.
-  - Socket.IO: A real-time, bidirectional communication library for building interactive web applications.
-  - Tailwindcss: A utility-first CSS framework that provides a set of pre-defined CSS classes
+- React: A JavaScript library for building user interfaces.
+- Socket.IO: A real-time, bidirectional communication library for building interactive web applications.
+- Tailwindcss: A utility-first CSS framework that provides a set of pre-defined CSS classes
 
 ## Contributing
 
 Contributions to the project are welcome. To contribute, follow these steps:
 
-  - Fork the repository.
-  - Create a new branch for your feature: git checkout -b feature-name
-  - Commit your changes: git commit -m 'Add feature'
-  - Push to the branch: git push origin feature-name
-  - Open a Pull Request.
+- Fork the repository.
+- Create a new branch for your feature: git checkout -b feature-name
+- Commit your changes: git commit -m 'Add feature'
+- Push to the branch: git push origin feature-name
+- Open a Pull Request.
 
 ## License
 
