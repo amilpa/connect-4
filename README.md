@@ -6,7 +6,7 @@ Welcome to the Connect 4 Multiplayer Game, a web-based implementation of the cla
 
 ## Table of Contents
 
-- [Demo](https://youtu.be/sB6N7P7e4XY)
+- [Demo](#demo)
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
@@ -17,7 +17,7 @@ Welcome to the Connect 4 Multiplayer Game, a web-based implementation of the cla
 
 ## Demo
 
-A live demo of the game can be accessed [here](link_to_live_demo).
+A live demo of the game can be accessed [here](https://youtu.be/sB6N7P7e4XY).
 
 ## Features
 
