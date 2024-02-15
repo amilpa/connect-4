@@ -1,6 +1,6 @@
 # Connect 4 Multiplayer Game with React and Socket.IO
 
-![Connect 4 Game](link_to_game_screenshot)
+![alt text](image.png)
 
 Welcome to the Connect 4 Multiplayer Game, a web-based implementation of the classic Connect 4 board game created using React and Socket.IO. This interactive project allows users to host games, invite friends to join with a unique code, change their usernames, and even enjoy rematches. Get ready for hours of fun with friends or players from around the world!
 
